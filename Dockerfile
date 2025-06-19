@@ -16,13 +16,19 @@ RUN wget https://download.screamingfrog.co.uk/products/seo-spider/screamingfrogs
     dpkg -i screamingfrogseospider_18.1_all.deb && \
     rm screamingfrogseospider_18.1_all.deb
 
-# Configura licenza e cartella utente
-RUN mkdir /root/.ScreamingFrogSEOSpider
-RUN touch /root/.ScreamingFrogSEOSpider/spider.config
-RUN echo 'eula.accepted=12' >> /root/.ScreamingFrogSEOSpider/spider.config
-COPY licence.txt /root/.ScreamingFrogSEOSpider/licence.txt
+# Crea la cartella e accetta EULA
+RUN mkdir -p /root/.ScreamingFrogSEOSpider && \
+    echo 'eula.accepted=12' > /root/.ScreamingFrogSEOSpider/spider.config
 
-# Script originale per avvio da CLI
+# Variabili d'ambiente per la licenza
+ENV SF_LICENSE_NAME=""
+ENV SF_LICENSE_KEY=""
+
+# Scrive licence.txt dinamicamente (non serve il file statico)
+RUN echo "name=${SF_LICENSE_NAME}" > /root/.ScreamingFrogSEOSpider/licence.txt && \
+    echo "license=${SF_LICENSE_KEY}" >> /root/.ScreamingFrogSEOSpider/licence.txt
+
+# Script CLI (se serve ancora)
 COPY start_screamingfrog.sh /root/start_screamingfrog.sh
 RUN chmod +x /root/start_screamingfrog.sh
 
