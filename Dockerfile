@@ -13,7 +13,7 @@ RUN apt install -y \
 
 # Installa Screaming Frog 18.1
 RUN wget https://download.screamingfrog.co.uk/products/seo-spider/screamingfrogseospider_18.1_all.deb && \
-    dpkg -i screamingfrogseospider_18.1_all.deb && \
+    dpkg -i screamingfrogseospider_22.1_all.deb && \
     rm screamingfrogseospider_18.1_all.deb
 
 # Crea la cartella e accetta EULA
