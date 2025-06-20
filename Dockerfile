@@ -16,18 +16,6 @@ RUN wget https://download.screamingfrog.co.uk/products/seo-spider/screamingfrogs
     dpkg -i screamingfrogseospider_22.1_all.deb && \
     rm screamingfrogseospider_22.1_all.deb
 
-# Variabili d'ambiente per la licenza
-ENV SF_LICENSE_NAME=""
-ENV SF_LICENSE_KEY=""
-
-# Crea la cartella e accetta EULA
-RUN mkdir -p /root/.ScreamingFrogSEOSpider && \
-    echo 'eula.accepted=12' > /root/.ScreamingFrogSEOSpider/spider.config
-
-# Scrive licence.txt dinamicamente (non serve il file statico)
-RUN echo "name=$SF_LICENSE_NAME" > /root/.ScreamingFrogSEOSpider/licence.txt && \
-    echo "license=$SF_LICENSE_KEY" >> /root/.ScreamingFrogSEOSpider/licence.txt
-
 # Script CLI (se serve ancora)
 COPY start_screamingfrog.sh /root/start_screamingfrog.sh
 RUN chmod +x /root/start_screamingfrog.sh
