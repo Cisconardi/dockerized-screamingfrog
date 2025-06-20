@@ -42,7 +42,7 @@ RUN mkdir -p /output /crawls
 ENV DISPLAY :99
 
 # Espone la porta API MCP
-EXPOSE 8000
+EXPOSE 8080
 
 # Avvio: MCP Server (puoi cambiare con variabile se vuoi usare ancora CLI)
 ENTRYPOINT ["/entrypoint.sh"]
