@@ -34,6 +34,8 @@ RUN chmod +x /root/start_screamingfrog.sh
 
 # === INTEGRAZIONE MCP SERVER ===
 
+WORKDIR /app
+
 # Cartella API FastAPI (MCP)
 COPY mcp /app/mcp
 COPY requirements.txt /app/requirements.txt
