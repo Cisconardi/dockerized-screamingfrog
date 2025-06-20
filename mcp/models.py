@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import Optional, List
 
 class CrawlRequest(BaseModel):
     url: str
@@ -19,3 +19,4 @@ class CrawlRequest(BaseModel):
     proxy: Optional[str] = ""
     max_depth: Optional[int] = 0
     max_urls: Optional[int] = 0
+    output_folder: Optional[str] = None #aggiungot per compatibilità
