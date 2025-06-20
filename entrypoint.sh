@@ -13,9 +13,11 @@ chmod -R 777 /output /crawls /root/.ScreamingFrogSEOSpider
 # Accetta EULA Screaming Frog
 echo "eula.accepted=15" > /root/.ScreamingFrogSEOSpider/spider.config
 
-# Imposta licenza
-echo "name=${SF_LICENSE_NAME}" > /root/.ScreamingFrogSEOSpider/licence.txt
-echo "license=${SF_LICENSE_KEY}" >> /root/.ScreamingFrogSEOSpider/licence.txt
+# Imposta licenza correttamente (prima riga: username, seconda riga: key)
+echo "${SF_LICENSE_NAME}" > /root/.ScreamingFrogSEOSpider/licence.txt
+echo "${SF_LICENSE_KEY}" >> /root/.ScreamingFrogSEOSpider/licence.txt
+chmod 600 /root/.ScreamingFrogSEOSpider/licence.txt
+
 chmod 600 /root/.ScreamingFrogSEOSpider/licence.txt
 
 # Avvia il server FastAPI
