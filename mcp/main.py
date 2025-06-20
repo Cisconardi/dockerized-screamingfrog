@@ -32,6 +32,7 @@ def get_status(crawl_id: str):
         raise HTTPException(status_code=404, detail="Crawl ID not found")
     return {"crawl_id": crawl_id, "status": status}
 
+# ROUTE DINAMICA PER DOWNLOAD
 @app.get("/download/{crawl_id}")
 def download_report(crawl_id: str):
     filename = "internal_all.csv"
@@ -39,3 +40,6 @@ def download_report(crawl_id: str):
     if not os.path.isfile(path):
         raise HTTPException(status_code=404, detail="Report not found")
     return FileResponse(path, filename=f"{crawl_id}_{filename}", media_type="application/octet-stream")
+
+# MOUNT STATICO PER DEBUG
+app.mount("/static", StaticFiles(directory="/output"), name="static")
