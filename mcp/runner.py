@@ -3,6 +3,15 @@ from pathlib import Path
 from mcp.models import CrawlRequest
 
 def build_command(req: CrawlRequest):
+    """
+    Constructs the Screaming Frog CLI command based on the CrawlRequest.
+
+    Args:
+        req: The CrawlRequest object containing crawl parameters.
+
+    Returns:
+        A tuple containing the list of command arguments and the output folder path string.
+    """
     output_folder = Path(req.output_folder)
     output_folder.mkdir(parents=True, exist_ok=True)
 
@@ -53,6 +62,18 @@ def build_command(req: CrawlRequest):
     return command, str(output_folder)
 
 def run_crawl(req: CrawlRequest):
+    """
+    Executes the Screaming Frog crawl command.
+
+    Args:
+        req: The CrawlRequest object.
+
+    Returns:
+        A dictionary containing the command executed, stdout, stderr,
+        return code, and output folder path.
+        Exceptions during subprocess.run (e.g., FileNotFoundError) are expected
+        to be caught by the caller.
+    """
     command, output_folder = build_command(req)
     result = subprocess.run(command, capture_output=True, text=True)
 
