@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# ✅ Imposta memoria massima Java a 1GB
+# Imposta memoria massima Java a 1GB
 export _JAVA_OPTIONS="-Xmx1024m"
 
 umask 000
@@ -14,6 +14,8 @@ mkdir -p /root/.ScreamingFrogSEOSpider
 echo "eula.accepted=15" > /root/.ScreamingFrogSEOSpider/spider.config
 echo "name=${SF_LICENSE_NAME}" > /root/.ScreamingFrogSEOSpider/licence.txt
 echo "license=${SF_LICENSE_KEY}" >> /root/.ScreamingFrogSEOSpider/licence.txt
+
+chmod 600 /root/.ScreamingFrogSEOSpider/licence.txt
 
 # Avvia il server FastAPI
 exec uvicorn mcp.main:app --host 0.0.0.0 --port 8080
