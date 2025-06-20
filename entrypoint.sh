@@ -3,7 +3,7 @@
 set -e  # Esce subito in caso di errore
 
 # Imposta memoria Java
-export _JAVA_OPTIONS="-Xmx1024m"
+export SF_ARGS="-Xmx1024m"
 
 # Permessi open per output & crawl (se montati)
 umask 000
