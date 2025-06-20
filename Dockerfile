@@ -23,10 +23,6 @@ RUN wget https://download.screamingfrog.co.uk/products/seo-spider/screamingfrogs
     dpkg -i screamingfrogseospider_22.1_all.deb && \
     rm screamingfrogseospider_22.1_all.deb
 
-# Copia gli script
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
 # CLI legacy
 COPY start_screamingfrog.sh /root/start_screamingfrog.sh
 RUN chmod +x /root/start_screamingfrog.sh
@@ -47,8 +43,18 @@ RUN pip3 install --no-cache-dir -r /app/requirements.txt
 RUN mkdir -p /output /crawls /root/.ScreamingFrogSEOSpider && \
     chmod -R 777 /output /crawls /root/.ScreamingFrogSEOSpider
 
+# Scrive automaticamente il file licence.txt dalle ENV
+RUN mkdir -p /root/.ScreamingFrogSEOSpider && \
+    echo "$SF_LICENSE_NAME" > /root/.ScreamingFrogSEOSpider/licence.txt && \
+    echo "$SF_LICENSE_KEY" >> /root/.ScreamingFrogSEOSpider/licence.txt && \
+    chmod 600 /root/.ScreamingFrogSEOSpider/licence.txt
+
 # Espone la porta FastAPI MCP
 EXPOSE 8080
+
+# Copia gli script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Avvio server MCP
 ENTRYPOINT ["/entrypoint.sh"]
