@@ -43,12 +43,9 @@ COPY requirements.txt /app/requirements.txt
 
 RUN pip3 install --no-cache-dir -r /app/requirements.txt
 
-# Crea le cartelle e assegna i permessi all'utente "app"
-RUN mkdir -p /output /crawls && \
-    chown -R app:app /output /crawls /app
-
-# Imposta utente non root
-USER app
+# Crea cartelle con permessi globali
+RUN mkdir -p /output /crawls /root/.ScreamingFrogSEOSpider && \
+    chmod -R 777 /output /crawls /root/.ScreamingFrogSEOSpider
 
 # Espone la porta FastAPI MCP
 EXPOSE 8080
