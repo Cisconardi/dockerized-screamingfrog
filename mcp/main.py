@@ -34,7 +34,7 @@ def get_status(crawl_id: str):
 
 @app.get("/download/{crawl_id}")
 def download_report(crawl_id: str):
-    filename = "Internal_All.csv"
+    filename = "internal_all.csv"
     path = f"/output/{crawl_id}/{filename}"
     if not os.path.isfile(path):
         raise HTTPException(status_code=404, detail="Report not found")
