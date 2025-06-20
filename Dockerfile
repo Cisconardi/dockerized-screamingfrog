@@ -16,6 +16,10 @@ RUN wget https://download.screamingfrog.co.uk/products/seo-spider/screamingfrogs
     dpkg -i screamingfrogseospider_22.1_all.deb && \
     rm screamingfrogseospider_22.1_all.deb
 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+
 # Script CLI (se serve ancora)
 COPY start_screamingfrog.sh /root/start_screamingfrog.sh
 RUN chmod +x /root/start_screamingfrog.sh
@@ -41,4 +45,4 @@ ENV DISPLAY :99
 EXPOSE 8000
 
 # Avvio: MCP Server (puoi cambiare con variabile se vuoi usare ancora CLI)
-ENTRYPOINT ["uvicorn", "mcp.main:app", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["/entrypoint.sh"]
