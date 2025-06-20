@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ ! -f /root/.ScreamingFrogSEOSpider/machineid ]; then
+  cp /persisted_machineid/machineid /root/.ScreamingFrogSEOSpider/machineid
+fi
+
 export _JAVA_OPTIONS="-Xmx1024m"
 umask 000
 
