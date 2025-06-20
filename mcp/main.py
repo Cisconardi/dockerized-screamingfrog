@@ -11,7 +11,21 @@ class CrawlRequest(BaseModel):
     url: str
     export_tabs: list[str] = ["Internal:All"]
     export_format: str = "csv"
-    output_folder: str | None = None
+    output_folder: Optional[str] = None
+    headless: bool = True
+    save_crawl: bool = True
+    crawl_subdomains: Optional[bool] = False
+    crawl_external: Optional[bool] = False
+    config: Optional[str] = None
+    crawl_list: Optional[str] = None
+    include: Optional[str] = None
+    exclude: Optional[str] = None
+    user_agent: Optional[str] = None
+    authentication: Optional[str] = None
+    proxy: Optional[str] = None
+    max_depth: Optional[int] = None
+    max_urls: Optional[int] = None
+    spider: Optional[bool] = False
 
 @app.post("/crawl")
 def crawl(req: CrawlRequest, background_tasks: BackgroundTasks):
