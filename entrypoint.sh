@@ -7,4 +7,4 @@ echo "name=${SF_LICENSE_NAME}" > /root/.ScreamingFrogSEOSpider/licence.txt
 echo "license=${SF_LICENSE_KEY}" >> /root/.ScreamingFrogSEOSpider/licence.txt
 
 # Avvia il server
-exec uvicorn mcp.main:app --host 0.0.0.0 --port 8000
+exec uvicorn mcp.main:app --host 0.0.0.0 --port 8080
