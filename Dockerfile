@@ -1,57 +1,46 @@
 FROM ubuntu:22.04
 
-# Imposta frontend non interattivo per apt
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
+ENV _JAVA_OPTIONS="-Xmx1024m"
 
-RUN apt-get update && apt-get install -y debconf-utils
-
-# Aggiorna sistema e installa dipendenze di sistema
-RUN apt update && apt upgrade -y && \
-    apt install -y \
-    ttf-mscorefonts-installer \
+# Installazione dipendenze di sistema
+RUN apt-get update && apt-get install -y \
+    debconf-utils ttf-mscorefonts-installer \
     sudo wget xdg-utils curl gnupg2 unzip \
-    libgconf-2-4 zenity fonts-wqy-zenhei xvfb libgtk2.0-0 libnss3 libxss1 \
+    libgconf-2-4 zenity fonts-wqy-zenhei xvfb \
+    libgtk2.0-0 libnss3 libxss1 \
     openjdk-21-jre \
-    python3 python3-pip
+    python3 python3-pip && \
+    apt-get clean
 
-# Installa Screaming Frog 22.1
+# Installa Screaming Frog
 RUN wget https://download.screamingfrog.co.uk/products/seo-spider/screamingfrogseospider_22.1_all.deb && \
     dpkg -i screamingfrogseospider_22.1_all.deb && \
     rm screamingfrogseospider_22.1_all.deb
 
-# CLI legacy
-COPY start_screamingfrog.sh /root/start_screamingfrog.sh
-RUN chmod +x /root/start_screamingfrog.sh
-
-# === CREA UTENTE APP ===
+# Crea utente generico
 RUN useradd -ms /bin/bash app
 
-# === INTEGRAZIONE MCP SERVER ===
-
-WORKDIR /app
-
-COPY mcp /app/mcp
-COPY requirements.txt /app/requirements.txt
-
-RUN pip3 install --no-cache-dir -r /app/requirements.txt
-
-# Crea cartelle con permessi globali
+# === Setup cartelle ===
 RUN mkdir -p /output /crawls /root/.ScreamingFrogSEOSpider && \
     chmod -R 777 /output /crawls /root/.ScreamingFrogSEOSpider
 
-# Scrive automaticamente il file licence.txt dalle ENV
-RUN mkdir -p /root/.ScreamingFrogSEOSpider && \
-    echo "$SF_LICENSE_NAME" > /root/.ScreamingFrogSEOSpider/licence.txt && \
-    echo "$SF_LICENSE_KEY" >> /root/.ScreamingFrogSEOSpider/licence.txt && \
-    chmod 600 /root/.ScreamingFrogSEOSpider/licence.txt
+# Copia script di avvio
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# CLI compatibile con avvio standalone
+COPY start_screamingfrog.sh /root/start_screamingfrog.sh
+RUN chmod +x /root/start_screamingfrog.sh
+
+# === COPY MCP Server ===
+WORKDIR /app
+COPY mcp /app/mcp
+COPY requirements.txt /app/requirements.txt
+RUN pip3 install --no-cache-dir -r /app/requirements.txt
 
 # Espone la porta FastAPI MCP
 EXPOSE 8080
 
-# Copia gli script
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-# Avvio server MCP
 ENTRYPOINT ["/entrypoint.sh"]
