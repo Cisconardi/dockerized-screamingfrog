@@ -11,6 +11,7 @@ class CrawlRequest(BaseModel):
     url: str
     export_tabs: list[str] = ["Internal:All"]
     export_format: str = "csv"
+    output_folder: str | None = None
 
 @app.post("/crawl")
 def crawl(req: CrawlRequest, background_tasks: BackgroundTasks):
