@@ -1,25 +1,17 @@
 #!/bin/bash
 
-set -e  # Esce subito in caso di errore
-
-# Imposta memoria Java
-export SF_ARGS="-Xmx1024m"
-
-# Permessi open per output & crawl (se montati)
+export _JAVA_OPTIONS="-Xmx1024m"
 umask 000
-mkdir -p /output /crawls /root/.ScreamingFrogSEOSpider
-chmod -R 777 /output /crawls /root/.ScreamingFrogSEOSpider
 
-# Accetta EULA Screaming Frog
-echo "eula.accepted=15" > /root/.ScreamingFrogSEOSpider/spider.config
+mkdir -p /root/.ScreamingFrogSEOSpider /output /crawls
+chmod -R 777 /root/.ScreamingFrogSEOSpider /output /crawls
 
-# Imposta licenza correttamente (prima riga: username, seconda riga: key)
+# Scrivi licenza valida in due righe
 echo "${SF_LICENSE_NAME}" > /root/.ScreamingFrogSEOSpider/licence.txt
 echo "${SF_LICENSE_KEY}" >> /root/.ScreamingFrogSEOSpider/licence.txt
-chmod 600 /root/.ScreamingFrogSEOSpider/licence.txt
 
-chmod 600 /root/.ScreamingFrogSEOSpider/licence.txt
+# Accetta EULA
+echo "eula.accepted=15" > /root/.ScreamingFrogSEOSpider/spider.config
 
-# Avvia il server FastAPI
-echo "Starting FastAPI MCP server..."
+# Avvia FastAPI MCP
 exec uvicorn mcp.main:app --host 0.0.0.0 --port 8080
