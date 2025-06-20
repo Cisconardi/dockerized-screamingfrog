@@ -15,9 +15,6 @@ RUN apt update && apt upgrade -y && \
     openjdk-21-jre \
     python3 python3-pip
 
-# Imposta limite memoria Java (1GB)
-ENV _JAVA_OPTIONS="-Xmx1024m"
-
 # Installa Screaming Frog 22.1
 RUN wget https://download.screamingfrog.co.uk/products/seo-spider/screamingfrogseospider_22.1_all.deb && \
     dpkg -i screamingfrogseospider_22.1_all.deb && \
