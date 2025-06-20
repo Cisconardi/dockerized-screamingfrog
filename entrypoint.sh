@@ -19,5 +19,5 @@ echo "license=${SF_LICENSE_KEY}" >> /root/.ScreamingFrogSEOSpider/licence.txt
 chmod 600 /root/.ScreamingFrogSEOSpider/licence.txt
 
 # Avvia il server FastAPI
-echo "✅ Starting FastAPI MCP server..."
+echo "Starting FastAPI MCP server..."
 exec uvicorn mcp.main:app --host 0.0.0.0 --port 8080
