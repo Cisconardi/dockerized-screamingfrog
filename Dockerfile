@@ -3,6 +3,7 @@ FROM ubuntu:22.04
 # Imposta frontend non interattivo per apt
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
+
 RUN apt-get update && apt-get install -y debconf-utils
 
 # Aggiorna sistema e installa dipendenze di sistema
@@ -26,9 +27,12 @@ RUN wget https://download.screamingfrog.co.uk/products/seo-spider/screamingfrogs
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# (Opzionale) CLI legacy
+# CLI legacy
 COPY start_screamingfrog.sh /root/start_screamingfrog.sh
 RUN chmod +x /root/start_screamingfrog.sh
+
+# === CREA UTENTE APP ===
+RUN useradd -ms /bin/bash app
 
 # === INTEGRAZIONE MCP SERVER ===
 
@@ -39,8 +43,12 @@ COPY requirements.txt /app/requirements.txt
 
 RUN pip3 install --no-cache-dir -r /app/requirements.txt
 
-# Crea le cartelle di output e crawl
-RUN mkdir -p /output /crawls
+# Crea le cartelle e assegna i permessi all'utente "app"
+RUN mkdir -p /output /crawls && \
+    chown -R app:app /output /crawls /app
+
+# Imposta utente non root
+USER app
 
 # Espone la porta FastAPI MCP
 EXPOSE 8080
