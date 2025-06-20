@@ -44,7 +44,5 @@ ENV DISPLAY :99
 # Espone la porta API MCP
 EXPOSE 8080
 
-ENV _JAVA_OPTIONS="-Xmx1024m"
-
 # Avvio: MCP Server (puoi cambiare con variabile se vuoi usare ancora CLI)
 ENTRYPOINT ["/entrypoint.sh"]
