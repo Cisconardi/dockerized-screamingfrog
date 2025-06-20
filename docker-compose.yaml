@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  screamingfrog:
+    image: cisconardi/dockerized-screamingfrog:latest
+    volumes:
+      - screamy_output:/output
+      - screamy_root_sf:/root/.ScreamingFrogSEOSpider
+      - screamy_machineid:/root/.ScreamingFrogSEOSpider/machineid
+
+volumes:
+  screamy_output:
+  screamy_root_sf:
+  screamy_machineid:
