@@ -1,11 +1,9 @@
-# mcp/runner.py
 import subprocess
-import uuid
 from pathlib import Path
+from mcp.models import CrawlRequest
 
-def build_command(req):
-    output_id = str(uuid.uuid4())
-    output_folder = Path("/output") / output_id
+def build_command(req: CrawlRequest):
+    output_folder = Path(req.output_folder)
     output_folder.mkdir(parents=True, exist_ok=True)
 
     command = ["/usr/bin/screamingfrogseospider"]
@@ -54,7 +52,7 @@ def build_command(req):
 
     return command, str(output_folder)
 
-def run_crawl(req):
+def run_crawl(req: CrawlRequest):
     command, output_folder = build_command(req)
     result = subprocess.run(command, capture_output=True, text=True)
 
