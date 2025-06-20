@@ -25,8 +25,8 @@ RUN mkdir -p /root/.ScreamingFrogSEOSpider && \
     echo 'eula.accepted=12' > /root/.ScreamingFrogSEOSpider/spider.config
 
 # Scrive licence.txt dinamicamente (non serve il file statico)
-RUN echo "name=${SF_LICENSE_NAME}" > /root/.ScreamingFrogSEOSpider/licence.txt && \
-    echo "license=${SF_LICENSE_KEY}" >> /root/.ScreamingFrogSEOSpider/licence.txt
+RUN echo "name=$SF_LICENSE_NAME" > /root/.ScreamingFrogSEOSpider/licence.txt && \
+    echo "license=$SF_LICENSE_KEY" >> /root/.ScreamingFrogSEOSpider/licence.txt
 
 # Script CLI (se serve ancora)
 COPY start_screamingfrog.sh /root/start_screamingfrog.sh
