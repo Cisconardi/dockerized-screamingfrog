@@ -3,7 +3,7 @@ import subprocess
 def run_crawl(url: str, export_tabs: list, export_format: str, output_folder: str):
     export_tabs_str = ",".join(export_tabs)
     command = [
-        "/opt/screamingfrogseospider/screamingfrogseospider",
+        "/usr/bin/screamingfrogseospider",
         "--headless",
         "--crawl", url,
         "--save-crawl",
