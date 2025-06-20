@@ -2,7 +2,7 @@
 
 # Genera il file licence.txt a runtime
 mkdir -p /root/.ScreamingFrogSEOSpider
-echo "eula.accepted=12" > /root/.ScreamingFrogSEOSpider/spider.config
+echo "eula.accepted=15" > /root/.ScreamingFrogSEOSpider/spider.config
 echo "name=${SF_LICENSE_NAME}" > /root/.ScreamingFrogSEOSpider/licence.txt
 echo "license=${SF_LICENSE_KEY}" >> /root/.ScreamingFrogSEOSpider/licence.txt
 
