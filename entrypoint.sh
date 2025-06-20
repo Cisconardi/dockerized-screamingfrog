@@ -6,5 +6,7 @@ echo "eula.accepted=15" > /root/.ScreamingFrogSEOSpider/spider.config
 echo "name=${SF_LICENSE_NAME}" > /root/.ScreamingFrogSEOSpider/licence.txt
 echo "license=${SF_LICENSE_KEY}" >> /root/.ScreamingFrogSEOSpider/licence.txt
 
+export _JAVA_OPTIONS="-Xmx1024m"
+
 # Avvia il server
 exec uvicorn mcp.main:app --host 0.0.0.0 --port 8080
