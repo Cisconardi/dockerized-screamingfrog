@@ -1,26 +1,32 @@
 FROM ubuntu:22.04
 
 # Imposta frontend non interattivo per apt
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
+RUN apt-get update && apt-get install -y debconf-utils
 
-# Aggiorna sistema e installa dipendenze
-RUN apt update && apt upgrade -y
-RUN apt install -y \
+# Aggiorna sistema e installa dipendenze di sistema
+RUN apt update && apt upgrade -y && \
+    apt install -y \
     ttf-mscorefonts-installer \
-    sudo wget xdg-utils \
+    sudo wget xdg-utils curl gnupg2 unzip \
     libgconf-2-4 zenity fonts-wqy-zenhei xvfb libgtk2.0-0 libnss3 libxss1 \
+    openjdk-21-jre \
     python3 python3-pip
 
-# Installa Screaming Frog 18.1
+# Imposta limite memoria Java (1GB)
+ENV _JAVA_OPTIONS="-Xmx1024m"
+
+# Installa Screaming Frog 22.1
 RUN wget https://download.screamingfrog.co.uk/products/seo-spider/screamingfrogseospider_22.1_all.deb && \
     dpkg -i screamingfrogseospider_22.1_all.deb && \
     rm screamingfrogseospider_22.1_all.deb
 
+# Copia gli script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-
-# Script CLI (se serve ancora)
+# (Opzionale) CLI legacy
 COPY start_screamingfrog.sh /root/start_screamingfrog.sh
 RUN chmod +x /root/start_screamingfrog.sh
 
@@ -28,21 +34,16 @@ RUN chmod +x /root/start_screamingfrog.sh
 
 WORKDIR /app
 
-# Cartella API FastAPI (MCP)
 COPY mcp /app/mcp
 COPY requirements.txt /app/requirements.txt
 
-# Installa le dipendenze Python
-RUN pip3 install -r /app/requirements.txt
+RUN pip3 install --no-cache-dir -r /app/requirements.txt
 
-# Crea cartelle di output e crawls
+# Crea le cartelle di output e crawl
 RUN mkdir -p /output /crawls
 
-# Imposta display virtuale
-ENV DISPLAY :99
-
-# Espone la porta API MCP
+# Espone la porta FastAPI MCP
 EXPOSE 8080
 
-# Avvio: MCP Server (puoi cambiare con variabile se vuoi usare ancora CLI)
+# Avvio server MCP
 ENTRYPOINT ["/entrypoint.sh"]
