@@ -23,7 +23,8 @@ def crawl(req: CrawlRequest, background_tasks: BackgroundTasks):
 
 def run_and_capture(req: CrawlRequest, output_path: str, crawl_id: str):
     try:
-        run_crawl(req.url, req.export_tabs, req.export_format, output_path)
+        req.output_folder = output_path  # imposta dinamicamente la cartella
+        run_crawl(req)
         crawl_states[crawl_id] = "success"
     except Exception as e:
         crawl_states[crawl_id] = f"failed: {str(e)}"
