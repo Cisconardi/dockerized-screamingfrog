@@ -1,5 +1,6 @@
 from fastapi import FastAPI, BackgroundTasks, HTTPException
-from pydantic import BaseModel
+from fastapi.responses import FileResponse
+from mcp.models import CrawlRequest
 from mcp.runner import run_crawl
 import uuid
 import os
@@ -7,38 +8,18 @@ import os
 app = FastAPI()
 crawl_states = {}
 
-class CrawlRequest(BaseModel):
-    url: str
-    export_tabs: list[str] = ["Internal:All"]
-    export_format: str = "csv"
-    output_folder: Optional[str] = None
-    headless: bool = True
-    save_crawl: bool = True
-    crawl_subdomains: Optional[bool] = False
-    crawl_external: Optional[bool] = False
-    config: Optional[str] = None
-    crawl_list: Optional[str] = None
-    include: Optional[str] = None
-    exclude: Optional[str] = None
-    user_agent: Optional[str] = None
-    authentication: Optional[str] = None
-    proxy: Optional[str] = None
-    max_depth: Optional[int] = None
-    max_urls: Optional[int] = None
-    spider: Optional[bool] = False
-
 @app.post("/crawl")
 def crawl(req: CrawlRequest, background_tasks: BackgroundTasks):
     crawl_id = str(uuid.uuid4())
     output_path = f"/output/{crawl_id}"
     os.makedirs(output_path, exist_ok=True)
+    req.output_folder = output_path
     crawl_states[crawl_id] = "running"
-    background_tasks.add_task(run_and_capture, req, output_path, crawl_id)
+    background_tasks.add_task(run_and_capture, req, crawl_id)
     return {"status": "started", "crawl_id": crawl_id}
 
-def run_and_capture(req: CrawlRequest, output_path: str, crawl_id: str):
+def run_and_capture(req: CrawlRequest, crawl_id: str):
     try:
-        req.output_folder = output_path  # imposta dinamicamente la cartella
         run_crawl(req)
         crawl_states[crawl_id] = "success"
     except Exception as e:
